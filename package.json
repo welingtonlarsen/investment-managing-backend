@@ -26,8 +26,7 @@
     "premigration:generate": "npm run build",
     "migration:generate": "npm run typeorm -- -d dist/src/modules/configuration/database/datasource.js migration:generate ./src/migrations/${npm_config_filename}",
     "migration:run": "npm run typeorm -- -d dist/src/modules/configuration/database/datasource.js migration:run",
-    "migration:create": "npm run typeorm migration:create ./src/migrations/${npm_config_filename}",
-    "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build"
+    "migration:create": "npm run typeorm migration:create ./src/migrations/${npm_config_filename}"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
