@@ -1,6 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class populateStocks1691720755684 implements MigrationInterface {
+export class populateStocks1696120797967 implements MigrationInterface {
+  name = 'populateStocks1696120797967';
+
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
       INSERT INTO stock (symbol, specification)

@@ -9,7 +9,7 @@ export const options: DataSourceOptions = (() => {
     password: process.env.TYPEORM_PASSWORD,
     entities: [process.env.TYPEORM_ENTITIES],
     logging: process.env.TYPEORM_LOGGING === 'true',
-    synchronize: true,
+    synchronize: false,
     database: process.env.TYPEORM_DATABASE,
     migrations: [process.env.TYPEORM_MIGRATIONS],
     migrationsRun: process.env.TYPEORM_MIGRATIONS_RUN === 'true',
