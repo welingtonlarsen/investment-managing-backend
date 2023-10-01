@@ -1,5 +1,7 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 
+console.log(process.env.TYPEORM_HOST)
+
 export const options: DataSourceOptions = (() => {
   return {
     type: 'mysql' as any,

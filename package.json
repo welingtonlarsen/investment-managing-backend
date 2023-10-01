@@ -12,7 +12,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "npm run test:unit && npm run test:int && npm run test:e2e",
     "test:unit": "jest --config ./jest-unit.json",
@@ -26,7 +26,8 @@
     "premigration:generate": "npm run build",
     "migration:generate": "npm run typeorm -- -d dist/src/modules/configuration/database/datasource.js migration:generate ./src/migrations/${npm_config_filename}",
     "migration:run": "npm run typeorm -- -d dist/src/modules/configuration/database/datasource.js migration:run",
-    "migration:create": "npm run typeorm migration:create ./src/migrations/${npm_config_filename}"
+    "migration:create": "npm run typeorm migration:create ./src/migrations/${npm_config_filename}",
+    "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
