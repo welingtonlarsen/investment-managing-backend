@@ -1,10 +1,11 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
-console.log(process.env.TYPEORM_HOST)
+console.log(process.env.TYPEORM_HOST);
 
-export const options: DataSourceOptions = (() => {
+export const options: PostgresConnectionOptions = (() => {
   return {
-    type: 'mysql' as any,
+    type: 'postgres',
     host: process.env.TYPEORM_HOST,
     port: +process.env.TYPEORM_PORT,
     username: process.env.TYPEORM_USERNAME,
