@@ -16,17 +16,20 @@ import { UpdateBrokerageOrderDto } from '../controllers/dto/request/update-broke
 import { BrokerageOrderResponseDto } from '../controllers/dto/response/brokerage-order.response.dto';
 import { SummaryResponseDto } from '../controllers/dto/response/summary.response.dto';
 import { SummaryFactory } from './factory/summary.factory';
+import { CustodyService } from 'src/modules/custody/custody.service';
 
 @Injectable()
 export class BrokerageOrderService {
   constructor(
     @Inject(BROKERAGE_ORDER_REPOSITORY_TOKEN)
     private brokerageOrderRepository: BrokerageOrderRepository,
+    private custodyService: CustodyService,
   ) {}
 
   public async create(data: CreateBrokerageOrderDto): Promise<void> {
     const brokerageOrderEntity = BrokerageOrderEntityFactory.from(data);
     await this.brokerageOrderRepository.upsert(brokerageOrderEntity);
+    await this.custodyService.upsertCustody(data.orders);
   }
 
   public async getAllSummary(
