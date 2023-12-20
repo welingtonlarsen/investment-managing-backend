@@ -14,10 +14,12 @@ import { Stock } from '../brokerage-order/adapter/repository/entity/stock.typeor
 import { BusinessSummary } from '../brokerage-order/controllers/dto/request/business-summary.dto';
 import { FinancialSummary } from '../brokerage-order/controllers/dto/request/financial-summary.dto';
 import { BrokerageOrderModule } from '../brokerage-order/brokerage-order.module';
+import { CustodyModule } from '../custody/custody.module';
 
 @Module({
   imports: [
     BrokerageOrderModule,
+    CustodyModule,
     TypeOrmModule.forFeature([
       BrokerageOrder,
       GeneralInformation,

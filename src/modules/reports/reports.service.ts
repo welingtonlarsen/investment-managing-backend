@@ -13,11 +13,30 @@ import {
   Order,
 } from '../brokerage-order/adapter/repository/entity/order.typeorm.entity';
 import { lastDayOfMonth, parse } from 'date-fns';
+import { CustodyService } from '../custody/custody.service';
+import { stock } from '../brokerage-order/adapter/__tests__/seed/brokerage-order-entity';
+import { Stock } from '../brokerage-order/adapter/repository/entity/stock.typeorm.entity';
+
+type Month =
+  | 'january'
+  | 'february'
+  | 'march'
+  | 'april'
+  | 'may'
+  | 'june'
+  | 'july'
+  | 'august'
+  | 'september'
+  | 'october'
+  | 'november'
+  | 'december';
 
 @Injectable()
 export class ReportsService {
   constructor(
     private brokerageOrderService: BrokerageOrderService,
+    private custodyService: CustodyService,
+
     @InjectRepository(BrokerageOrder)
     private readonly brokerageOrderRepository: Repository<BrokerageOrder>,
     @InjectRepository(Order)
@@ -56,10 +75,22 @@ export class ReportsService {
     const stockSymbols = [
       ...new Set(orders.map((order) => order.stock.symbol)),
     ];
+    const stocks = stockSymbols.reduce((stocks: Stock[], symbol: string) => {
+      const isAlreadyListed = !!stocks.find((stock) => stock.symbol === symbol);
+
+      if (!isAlreadyListed) {
+        const stock = orders
+          .map((order) => order.stock)
+          .filter((stock) => stock.symbol === symbol)[0];
+        stocks.push(stock);
+      }
+
+      return stocks;
+    }, []);
 
     // fetch operations by month
     await Promise.all(
-      Object.keys(months).map(async (monthName) => {
+      Object.keys(months).map(async (monthName: Month) => {
         const date = parse(monthName, 'MMMM', new Date());
         date.setFullYear(year);
 
@@ -163,9 +194,16 @@ export class ReportsService {
           {},
         );
 
+        const custody = await this.custodyService.getCustodyToMonth(
+          monthName,
+          year,
+          stocks,
+        );
+
         months[monthName] = {
           buy: buySideAvegagePrice,
           sell: sellSideAvegagePrice,
+          custody,
         };
       }),
     );

@@ -3,8 +3,9 @@ import { Stock } from '../brokerage-order/adapter/repository/entity/stock.typeor
 import { BuyOrSell } from '../brokerage-order/domain/entity/order.entity';
 import { Custody } from './custody.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, Repository } from 'typeorm';
 import { OrderDto } from '../brokerage-order/domain/dto/order.dto';
+import { lastDayOfMonth, parse } from 'date-fns';
 
 @Injectable()
 export class CustodyService {
@@ -13,7 +14,7 @@ export class CustodyService {
     @InjectRepository(Stock) private stockRepository: Repository<Stock>,
   ) {}
 
-  async upsertCustody(orders: OrderDto[]) {
+  async upsertCustody(orders: OrderDto[], date: Date) {
     await Promise.all(
       orders.map(async (order) => {
         const stock = await this.stockRepository.findOneBy({
@@ -35,6 +36,7 @@ export class CustodyService {
             order.price,
             order.quantity,
             order.price,
+            date,
           );
 
           await this.custodyRepository.save(custody);
@@ -79,9 +81,49 @@ export class CustodyService {
           newAveragePrice,
           newBuyQuantity,
           newBuyPrice,
+          date,
         );
         await this.custodyRepository.save(custody);
       }),
     );
+  }
+
+  async getCustodyToMonth(
+    month:
+      | 'january'
+      | 'february'
+      | 'march'
+      | 'april'
+      | 'may'
+      | 'june'
+      | 'july'
+      | 'august'
+      | 'september'
+      | 'october'
+      | 'november'
+      | 'december',
+    year: number,
+    stocks: Stock[],
+  ) {
+    const date = parse(month, 'MMMM', new Date());
+    date.setFullYear(year);
+
+    const custodies = [];
+
+    await Promise.all(
+      stocks.map(async (stock) => {
+        const custody = await this.custodyRepository.findOne({
+          where: {
+            createdAt: LessThanOrEqual(lastDayOfMonth(date)),
+            stock,
+          },
+          order: { id: 'DESC' },
+        });
+
+        if (custody) custodies.push(custody);
+      }),
+    );
+
+    return custodies;
   }
 }

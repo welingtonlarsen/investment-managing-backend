@@ -40,8 +40,8 @@ export class Custody {
   })
   buyPrice: number;
 
-  @CreateDateColumn({ type: 'date' })
-  cratedAt: Date;
+  @Column({ type: 'date' })
+  createdAt: Date;
 
   constructor(
     stock: Stock,
@@ -49,11 +49,13 @@ export class Custody {
     averagePrice: number,
     buyQuantity: number,
     buyPrice: number,
+    createdAt: Date,
   ) {
     this.stock = stock;
     this.quantity = quantity;
     this.averagePrice = averagePrice;
     this.buyPrice = buyPrice;
     this.buyQuantity = buyQuantity;
+    this.createdAt = createdAt;
   }
 }

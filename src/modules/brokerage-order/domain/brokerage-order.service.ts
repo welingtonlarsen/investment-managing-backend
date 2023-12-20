@@ -29,7 +29,10 @@ export class BrokerageOrderService {
   public async create(data: CreateBrokerageOrderDto): Promise<void> {
     const brokerageOrderEntity = BrokerageOrderEntityFactory.from(data);
     await this.brokerageOrderRepository.upsert(brokerageOrderEntity);
-    await this.custodyService.upsertCustody(data.orders);
+    await this.custodyService.upsertCustody(
+      data.orders,
+      data.generalInformation.tradingFlorDate,
+    );
   }
 
   public async getAllSummary(
