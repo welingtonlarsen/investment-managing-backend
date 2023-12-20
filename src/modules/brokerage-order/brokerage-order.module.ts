@@ -17,6 +17,7 @@ import { StockService } from './domain/stock.service';
 import { Stock } from './adapter/repository/entity/stock.typeorm.entity';
 import { StockController } from './controllers/stock.controller';
 import { CustodyModule } from '../custody/custody.module';
+import { OrderService } from './domain/order.service';
 
 @Module({
   imports: [
@@ -37,8 +38,9 @@ import { CustodyModule } from '../custody/custody.module';
   providers: [
     BrokerageOrderService,
     StockService,
+    OrderService,
     ...provideBrokerageOrderRepository(),
   ],
-  exports: [BrokerageOrderService],
+  exports: [BrokerageOrderService, StockService, OrderService],
 })
 export class BrokerageOrderModule {}

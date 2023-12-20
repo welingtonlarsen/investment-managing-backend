@@ -16,6 +16,8 @@ import { lastDayOfMonth, parse } from 'date-fns';
 import { CustodyService } from '../custody/custody.service';
 import { stock } from '../brokerage-order/adapter/__tests__/seed/brokerage-order-entity';
 import { Stock } from '../brokerage-order/adapter/repository/entity/stock.typeorm.entity';
+import { StockService } from '../brokerage-order/domain/stock.service';
+import { OrderService } from '../brokerage-order/domain/order.service';
 
 type Month =
   | 'january'
@@ -31,183 +33,95 @@ type Month =
   | 'november'
   | 'december';
 
+const EMPTY_MONTHS: Record<Month, any> = {
+  january: {},
+  february: {},
+  march: {},
+  april: {},
+  may: {},
+  june: {},
+  july: {},
+  august: {},
+  september: {},
+  october: {},
+  november: {},
+  december: {},
+};
+
 @Injectable()
 export class ReportsService {
   constructor(
-    private brokerageOrderService: BrokerageOrderService,
     private custodyService: CustodyService,
-
-    @InjectRepository(BrokerageOrder)
-    private readonly brokerageOrderRepository: Repository<BrokerageOrder>,
-    @InjectRepository(Order)
-    private readonly orderRepository: Repository<Order>,
+    private stockService: StockService,
+    private orderService: OrderService,
   ) {}
   public async generateAnnual() {
     const year = 2022;
-    // const months = Array.from({ length: 12 }, (_, i) => i);
 
-    const months = {
-      january: {},
-      february: {},
-      march: {},
-      april: {},
-      may: {},
-      june: {},
-      july: {},
-      august: {},
-      september: {},
-      october: {},
-      november: {},
-      december: {},
-    };
+    const months = { ...EMPTY_MONTHS };
 
-    // fetch stock symbols traded on year
-    const orders = await this.orderRepository.find({
-      where: {
-        brokerageOrder: {
-          generalInformation: {
-            tradingFlorDate: MoreThanOrEqual(new Date(`${year}/01/01`)),
-          },
-        },
-      },
-      select: ['id'],
-    });
-    const stockSymbols = [
-      ...new Set(orders.map((order) => order.stock.symbol)),
-    ];
-    const stocks = stockSymbols.reduce((stocks: Stock[], symbol: string) => {
-      const isAlreadyListed = !!stocks.find((stock) => stock.symbol === symbol);
+    const { tradedStocks, tradedStockSymbols } =
+      await this.stockService.getStocksSymbolsTradedOnYear(year);
 
-      if (!isAlreadyListed) {
-        const stock = orders
-          .map((order) => order.stock)
-          .filter((stock) => stock.symbol === symbol)[0];
-        stocks.push(stock);
-      }
-
-      return stocks;
-    }, []);
-
-    // fetch operations by month
-    await Promise.all(
-      Object.keys(months).map(async (monthName: Month) => {
-        const date = parse(monthName, 'MMMM', new Date());
-        date.setFullYear(year);
-
-        const ordersOfMonth = await this.orderRepository.find({
-          relations: ['brokerageOrder'],
-          // loadRelationIds: true,
-          where: {
-            brokerageOrder: {
-              generalInformation: {
-                tradingFlorDate: Between(date, lastDayOfMonth(date)),
-              },
-            },
-          },
-        });
-
-        const ordersOfMonthGroupedByType = {
-          buy: ordersOfMonth
-            .filter((order) => order.buyOrSell === BuyOrSell.BUY)
-            .reduce((orders, currentOrder) => {
-              return [
-                ...orders,
-                {
-                  date: currentOrder.brokerageOrder.generalInformation
-                    .tradingFlorDate,
-                  stockSymbol: currentOrder.stock.symbol,
-                  quantity: currentOrder.quantity,
-                  price: currentOrder.price,
-                  total: currentOrder.total,
-                },
-              ];
-            }, []),
-
-          sell: ordersOfMonth
-            .filter((operation) => operation.buyOrSell === BuyOrSell.SELL)
-            .reduce((orders, currentOrder) => {
-              return [
-                ...orders,
-                {
-                  date: currentOrder.brokerageOrder.generalInformation
-                    .tradingFlorDate,
-                  stockSymbol: currentOrder.stock.symbol,
-                  quantity: currentOrder.quantity,
-                  price: currentOrder.price,
-                  total: currentOrder.total,
-                },
-              ];
-            }, []),
-        };
-
-        const buySideAvegagePrice = ordersOfMonthGroupedByType.buy.reduce(
-          (total, current) => {
-            const stockSybom = current.stockSymbol;
-
-            if (total[stockSybom]) {
-              const newQuantity = total[stockSybom].quantity + current.quantity;
-              const newAverage =
-                (total[stockSybom].average * total[stockSybom].quantity +
-                  current.total) /
-                newQuantity;
-
-              return {
-                ...total,
-                [stockSybom]: { quantity: newQuantity, average: newAverage },
-              };
-            } else {
-              const quantity = current.quantity;
-              const average = current.total / quantity;
-              return {
-                ...total,
-                [stockSybom]: { quantity, average },
-              };
-            }
-          },
-          {},
-        );
-
-        const sellSideAvegagePrice = ordersOfMonthGroupedByType.sell.reduce(
-          (total, current) => {
-            const stockSybom = current.stockSymbol;
-
-            if (total[stockSybom]) {
-              const newQuantity = total[stockSybom].quantity + current.quantity;
-              const newAverage =
-                (total[stockSybom].average * total[stockSybom].quantity +
-                  current.total) /
-                newQuantity;
-
-              return {
-                ...total,
-                [stockSybom]: { quantity: newQuantity, average: newAverage },
-              };
-            } else {
-              const quantity = current.quantity;
-              const average = current.total / quantity;
-              return {
-                ...total,
-                [stockSybom]: { quantity, average },
-              };
-            }
-          },
-          {},
-        );
-
-        const custody = await this.custodyService.getCustodyToMonth(
+    for (const monthName of Object.keys(months) as Month[]) {
+      const ordersOfMonthGroupedByBuyAndSell =
+        await this.orderService.getMonthOrdersGroupedByBuyAndSell(
           monthName,
           year,
-          stocks,
         );
 
-        months[monthName] = {
-          buy: buySideAvegagePrice,
-          sell: sellSideAvegagePrice,
-          custody,
-        };
-      }),
-    );
+      const buySideAvegagePrice = this.calculateAveragePrice(
+        ordersOfMonthGroupedByBuyAndSell,
+        'buy',
+      );
 
-    return { stockSymbols, months };
+      const sellSideAvegagePrice = this.calculateAveragePrice(
+        ordersOfMonthGroupedByBuyAndSell,
+        'sell',
+      );
+
+      const custody = await this.custodyService.getCustodyToMonth(
+        monthName,
+        year,
+        tradedStocks,
+      );
+
+      months[monthName] = {
+        buy: buySideAvegagePrice,
+        sell: sellSideAvegagePrice,
+        custody,
+      };
+    }
+
+    return { tradedStockSymbols, months };
+  }
+
+  private calculateAveragePrice(ordersOfMonthGroupedByBuyAndSell, buyOrSell) {
+    return ordersOfMonthGroupedByBuyAndSell[buyOrSell].reduce(
+      (total, current) => {
+        const stockSybom = current.stockSymbol;
+
+        if (total[stockSybom]) {
+          const newQuantity = total[stockSybom].quantity + current.quantity;
+          const newAverage =
+            (total[stockSybom].average * total[stockSybom].quantity +
+              current.total) /
+            newQuantity;
+
+          return {
+            ...total,
+            [stockSybom]: { quantity: newQuantity, average: newAverage },
+          };
+        } else {
+          const quantity = current.quantity;
+          const average = current.total / quantity;
+          return {
+            ...total,
+            [stockSybom]: { quantity, average },
+          };
+        }
+      },
+      {},
+    );
   }
 }
