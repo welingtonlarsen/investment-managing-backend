@@ -31,6 +31,19 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+  postgres-e2e:
+    image: postgres:latest
+    platform: linux/arm64 # Especifica a arquitetura ARM64
+    restart: always
+    environment:
+      POSTGRES_DB: 'investment_managing_integration_test'
+      POSTGRES_USER: 'root'
+      POSTGRES_PASSWORD: 'root'
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres_data_e2e:/var/lib/postgresql/data
 
 volumes:
   postgres_data:
+  postgres_data_e2e:

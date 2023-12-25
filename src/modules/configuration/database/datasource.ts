@@ -1,7 +1,7 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
-console.log(process.env.TYPEORM_HOST);
+console.log('LOG: ', process.env.TYPEORM_ENTITIES);
 
 export const options: PostgresConnectionOptions = (() => {
   return {
@@ -17,6 +17,8 @@ export const options: PostgresConnectionOptions = (() => {
     migrations: [process.env.TYPEORM_MIGRATIONS],
     migrationsRun: process.env.TYPEORM_MIGRATIONS_RUN === 'true',
     supportBigNumbers: true,
+    autoLoadEntities: true,
+    dropSchema: process.env.TYPEORM_DROP_SCHEMA === 'true',
   };
 })();
 

@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm';
+import { BrokerageOrder } from '../../repository/entity/brokerage-order.db.entity';
 
 const databaseName = process.env.TYPEORM_DATABASE;
 let masterConnection: DataSource;
@@ -33,8 +34,10 @@ export async function closeDatabaseIntegrationConnections() {
 
 export async function resetDatabase() {
   try {
-    await masterConnection.query(`DROP DATABASE ${databaseName}`);
-    await masterConnection.query(`CREATE DATABASE ${databaseName}`);
+    // It's possible because I'm using cascade all
+    const brokerageOrderRepository =
+      masterConnection.getRepository(BrokerageOrder);
+    brokerageOrderRepository.clear();
   } catch (err) {
     process.stderr.write(
       `${err instanceof Error ? err.stack : JSON.stringify(err)}\n`,

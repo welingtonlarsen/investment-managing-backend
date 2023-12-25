@@ -55,9 +55,7 @@ export class ReportsService {
     private stockService: StockService,
     private orderService: OrderService,
   ) {}
-  public async generateAnnual() {
-    const year = 2022;
-
+  public async generateAnnual(year: number) {
     const months = { ...EMPTY_MONTHS };
 
     const { tradedStocks, tradedStockSymbols } =

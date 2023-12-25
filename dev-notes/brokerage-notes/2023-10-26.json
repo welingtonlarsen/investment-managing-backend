@@ -1,0 +1,55 @@
+{
+  "generalInformation": {
+    "brokerageOrderNumber": 75967773,
+    "tradingFlorDate": "2023-10-26",
+    "clientId": "2079101"
+  },
+  "orders": [
+    {
+      "market": "BOVESPA",
+      "buyOrSell": "BUY",
+      "marketType": "VISTA",
+      "symbol": "S&P500",
+      "quantity": 5,
+      "price": 231.43,
+      "total": 1157.15,
+      "debitOrCredit": "DEBIT"
+    }
+  ],
+  "businessSummary": {
+    "debentures": 0.0,
+    "sellInCash": 0.0,
+    "buyInCash": 1157.15,
+    "optionsBuy": 0.0,
+    "optionsSell": 0.0,
+    "termOptions": 0.0,
+    "federalSecurities": 0.0,
+    "operationValues": 1157.15
+  },
+  "financialSummary": {
+    "clearing": {
+      "operationsNetValue": 1157.15,
+      "settlementFee": 0.28,
+      "registryFee": 0.0,
+      "totalCblc": 1157.43
+    },
+    "exchange": {
+      "termOrOptionsFee": 0.0,
+      "anaFee": 0.0,
+      "fees": 0.05,
+      "total": 0.05
+    },
+    "operationalCosts": {
+      "operationalFee": 4.9,
+      "execution": 0.0,
+      "custody": 0.0,
+      "taxes": 0.52,
+      "irrf": 0.0,
+      "others": 0.28,
+      "totalCosts": 1163.18
+    },
+    "netDate": "2023-10-24",
+    "netTotalValue": 5209.16,
+    "netDebitOrCredit": "DEBIT"
+  }
+}

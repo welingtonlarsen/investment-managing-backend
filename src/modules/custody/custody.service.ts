@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
 import { Stock } from '../brokerage-order/adapter/repository/entity/stock.typeorm.entity';
 import { BuyOrSell } from '../brokerage-order/domain/entity/order.entity';
 import { Custody } from './custody.entity';
@@ -28,7 +28,9 @@ export class CustodyService {
 
         if (!lastCustody || lastCustody.quantity === 0) {
           if (order.buyOrSell === BuyOrSell.SELL)
-            throw new Error('Sell operation side not implemented');
+            throw new NotImplementedException(
+              'Sell operation side not implemented',
+            );
 
           const custody = new Custody(
             stock,
@@ -63,7 +65,9 @@ export class CustodyService {
             newBuyQuantity;
         } else {
           if (order.quantity > lastCustody.quantity)
-            throw new Error('Sell operation side not implemented');
+            throw new NotImplementedException(
+              'Sell operation side not implemented',
+            );
 
           newCustodyQuantity = lastCustody.quantity - order.quantity;
           newAveragePrice =
@@ -78,9 +82,9 @@ export class CustodyService {
         const custody = new Custody(
           stock,
           newCustodyQuantity,
-          newAveragePrice,
-          newBuyQuantity,
-          newBuyPrice,
+          Math.round(newAveragePrice),
+          Math.round(newBuyQuantity),
+          Math.round(newBuyPrice),
           date,
         );
         await this.custodyRepository.save(custody);
@@ -125,5 +129,46 @@ export class CustodyService {
     );
 
     return custodies;
+  }
+
+  // async getCurrentCustody() {
+  //   const custody = await this.custodyRepository.findAndCount({
+  //     take: 1,
+  //     order: { id: 'DESC' },
+  //   });
+  //   return {
+  //     custody: custody[0],
+  //     count: custody[1],
+  //   };
+  // }
+
+  async getCurrentCustody() {
+    // Buscando os símbolos únicos junto com o maior ID (ou outro campo relevante para ordenação)
+    const uniqueSymbols = await this.custodyRepository
+      .createQueryBuilder('custody')
+      .leftJoin('custody.stock', 'stock')
+      .select('DISTINCT(stock.symbol)', 'symbol')
+      .addSelect('MAX(custody.id)', 'maxId')
+      .groupBy('stock.symbol')
+      .getRawMany();
+
+    // Buscando os detalhes da custódia para cada símbolo único
+    const custodyDetails = [];
+    for (const item of uniqueSymbols) {
+      const detail = await this.custodyRepository
+        .createQueryBuilder('custody')
+        .leftJoinAndSelect('custody.stock', 'stock')
+        .where('stock.symbol = :symbol', { symbol: item.symbol })
+        // Ordenação pelo ID, caso haja múltiplas entradas para o mesmo símbolo
+        .orderBy('custody.id', 'DESC')
+        .take(1)
+        .getOne();
+
+      if (detail) {
+        custodyDetails.push(detail);
+      }
+    }
+
+    return custodyDetails;
   }
 }

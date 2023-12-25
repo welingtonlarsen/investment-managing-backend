@@ -49,6 +49,8 @@ export class BrokerageOrderTypeormRepository
           symbol: order.stock.symbol,
         });
 
+        console.log('LOG: ', stock);
+
         return new Order(
           order.market,
           order.buyOrSell,

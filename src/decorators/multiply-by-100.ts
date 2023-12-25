@@ -6,7 +6,7 @@ import {
 } from 'class-validator';
 
 function multiplyBy100(): PropertyDecorator {
-  return Transform((params) => params.value * 100);
+  return Transform((params) => Math.round(params.value * 100));
 }
 
 export function MultiplyBy100(validationOptions?: ValidationOptions) {

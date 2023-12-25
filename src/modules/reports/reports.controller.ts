@@ -1,12 +1,12 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Param, Post } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 
 @Controller('reports')
 export class ReportsController {
   constructor(private reportsService: ReportsService) {}
 
-  @Post()
-  generate() {
-    return this.reportsService.generateAnnual();
+  @Post(':year')
+  generate(@Param('year') year: number) {
+    return this.reportsService.generateAnnual(year);
   }
 }

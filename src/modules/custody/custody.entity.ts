@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Stock } from '../brokerage-order/adapter/repository/entity/stock.typeorm.entity';
-import { DecimalTransformer } from 'src/util/transformers';
+import { DecimalTransformer } from '../../util/transformers';
 
 @Entity()
 export class Custody {

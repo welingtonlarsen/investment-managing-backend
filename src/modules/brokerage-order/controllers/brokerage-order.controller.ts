@@ -19,6 +19,11 @@ import { BrokerageOrderResponseDto } from './dto/response/brokerage-order.respon
 export class BrokerageOrderController {
   constructor(private brokerageOrderService: BrokerageOrderService) {}
 
+  @Get()
+  async helloWorld() {
+    return 'hello';
+  }
+
   @Post()
   create(@Body() createBrokerageOrderDto: CreateBrokerageOrderDto) {
     return this.brokerageOrderService.create(createBrokerageOrderDto);

@@ -16,7 +16,7 @@ import { UpdateBrokerageOrderDto } from '../controllers/dto/request/update-broke
 import { BrokerageOrderResponseDto } from '../controllers/dto/response/brokerage-order.response.dto';
 import { SummaryResponseDto } from '../controllers/dto/response/summary.response.dto';
 import { SummaryFactory } from './factory/summary.factory';
-import { CustodyService } from 'src/modules/custody/custody.service';
+import { CustodyService } from '../../custody/custody.service';
 
 @Injectable()
 export class BrokerageOrderService {
