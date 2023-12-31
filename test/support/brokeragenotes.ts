@@ -2,7 +2,7 @@ export default {
   'BUY_S&P500_1': {
     generalInformation: {
       brokerageOrderNumber: 75670314,
-      tradingFlorDate: '2023-10-20',
+      tradingFlorDate: '2023-06-20',
       clientId: '2079101',
     },
     orders: [
@@ -49,7 +49,7 @@ export default {
         others: 0.28,
         totalCosts: 5.7,
       },
-      netDate: '2023-10-24',
+      netDate: '2023-06-20',
       netTotalValue: 5209.16,
       netDebitOrCredit: 'DEBIT',
     },
@@ -57,7 +57,7 @@ export default {
   'BUY_S&P500_2': {
     generalInformation: {
       brokerageOrderNumber: 75967773,
-      tradingFlorDate: '2023-10-26',
+      tradingFlorDate: '2023-06-22',
       clientId: '2079101',
     },
     orders: [
@@ -104,15 +104,70 @@ export default {
         others: 0.28,
         totalCosts: 1163.18,
       },
-      netDate: '2023-10-24',
+      netDate: '2023-06-22',
       netTotalValue: 5209.16,
+      netDebitOrCredit: 'DEBIT',
+    },
+  },
+  'BUY_S&P500_3': {
+    generalInformation: {
+      brokerageOrderNumber: 75967773,
+      tradingFlorDate: '2023-07-20',
+      clientId: '2079101',
+    },
+    orders: [
+      {
+        market: 'BOVESPA',
+        buyOrSell: 'BUY',
+        marketType: 'VISTA',
+        symbol: 'S&P500',
+        quantity: 2,
+        price: 202.1,
+        total: 404.2,
+        debitOrCredit: 'DEBIT',
+      },
+    ],
+    businessSummary: {
+      debentures: 0.0,
+      sellInCash: 0.0,
+      buyInCash: 404.2,
+      optionsBuy: 0.0,
+      optionsSell: 0.0,
+      termOptions: 0.0,
+      federalSecurities: 0.0,
+      operationValues: 404.2,
+    },
+    financialSummary: {
+      clearing: {
+        operationsNetValue: 404.2,
+        settlementFee: 0.28,
+        registryFee: 0.0,
+        totalCblc: 405.2,
+      },
+      exchange: {
+        termOrOptionsFee: 0.0,
+        anaFee: 0.0,
+        fees: 0.05,
+        total: 0.05,
+      },
+      operationalCosts: {
+        operationalFee: 4.9,
+        execution: 0.0,
+        custody: 0.0,
+        taxes: 0.52,
+        irrf: 0.0,
+        others: 0.28,
+        totalCosts: 405.2,
+      },
+      netDate: '2023-07-20',
+      netTotalValue: 405.2,
       netDebitOrCredit: 'DEBIT',
     },
   },
   'SELL_S&P500_1': {
     generalInformation: {
       brokerageOrderNumber: 75967774,
-      tradingFlorDate: '2023-10-28',
+      tradingFlorDate: '2023-07-10',
       clientId: '2079101',
     },
     orders: [
@@ -159,7 +214,7 @@ export default {
         others: 0.28,
         totalCosts: 1133.35,
       },
-      netDate: '2023-10-24',
+      netDate: '2023-07-10',
       netTotalValue: 1129.23,
       netDebitOrCredit: 'CREDIT',
     },
@@ -167,7 +222,7 @@ export default {
   BUY_ITUB4_1: {
     generalInformation: {
       brokerageOrderNumber: 75967775,
-      tradingFlorDate: '2023-11-10',
+      tradingFlorDate: '2023-08-12',
       clientId: '2079101',
     },
     orders: [
@@ -214,7 +269,7 @@ export default {
         others: 0.28,
         totalCosts: 2433.11,
       },
-      netDate: '2023-11-10',
+      netDate: '2023-08-12',
       netTotalValue: 2433.11,
       netDebitOrCredit: 'DEBIT',
     },
