@@ -51,7 +51,7 @@ export class OrderService {
             {
               date: currentOrder.brokerageOrder.generalInformation
                 .tradingFlorDate,
-              stockSymbol: currentOrder.stock.symbol,
+              symbol: currentOrder.stock.symbol,
               quantity: currentOrder.quantity,
               price: currentOrder.price,
               total: currentOrder.total,
@@ -67,7 +67,7 @@ export class OrderService {
             {
               date: currentOrder.brokerageOrder.generalInformation
                 .tradingFlorDate,
-              stockSymbol: currentOrder.stock.symbol,
+              symbol: currentOrder.stock.symbol,
               quantity: currentOrder.quantity,
               price: currentOrder.price,
               total: currentOrder.total,

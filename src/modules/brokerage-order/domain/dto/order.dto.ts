@@ -17,12 +17,13 @@ export enum DebitOrCredit {
 }
 
 export type OrderDto = {
-  market: Market;
-  buyOrSell: BuyOrSell;
-  marketType: MarketType;
   symbol: string;
   quantity: number;
   price: number;
   total: number;
-  debitOrCredit: DebitOrCredit;
+  debitOrCredit?: DebitOrCredit;
+  market?: Market;
+  buyOrSell?: BuyOrSell;
+  marketType?: MarketType;
+  date?: string;
 };

@@ -39,7 +39,7 @@ describe('Brokerage Order e2e', () => {
     it('should return created http status code and expected response body', () => {
       return request(app.getHttpServer())
         .post('/brokeragenotes')
-        .send(brokeragenotes['BUY_S&P500_1'])
+        .send(brokeragenotes['BUY_S&P500_JUNE_1'])
         .expect(201);
     });
   });

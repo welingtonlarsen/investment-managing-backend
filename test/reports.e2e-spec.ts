@@ -25,28 +25,68 @@ describe('Reports e2e', () => {
     // create many brokerage notes to many months
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['BUY_S&P500_1'])
-      .expect(201);
+      .send(brokeragenotes['BUY_S&P500_JUNE_1'])
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['BUY_S&P500_2'])
-      .expect(201);
+      .send(brokeragenotes['BUY_S&P500_JUNE_2'])
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['BUY_S&P500_3'])
-      .expect(201);
+      .send(brokeragenotes['BUY_S&P500_JULY_1'])
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['SELL_S&P500_1'])
-      .expect(201);
-    await request(app.getHttpServer())
-      .post('/brokeragenotes')
-      .send(brokeragenotes['BUY_ITUB4_1'])
-      .expect(201);
+      .send(brokeragenotes['SELL_S&P500_JULY_1'])
 
     // generate annual report
+    const result = await request(app.getHttpServer()).post('/reports/2023')
 
     // check results
-    expect(true).toBe(true);
+    expect(result.body.months['june']).toStrictEqual({
+      buy: {
+        "S&P500": {
+          quantity: 27,
+          average: 23552.037037037036,
+        },
+      },
+      sell: {},
+      custody: [{
+        stock: {
+          symbol: "S&P500",
+          specification: "IShare S&P500",
+        },
+        quantity: 27,
+        averagePrice: 235.52,
+        buyPrice: 235.52,
+        buyQuantity: 27,
+        createdAt: "2023-06-21",
+        id: 2,
+      }]
+    })
+
+    expect(result.body.months['july']).toStrictEqual({
+      buy: {
+        "S&P500": {
+          quantity: 2,
+          average: 20210,
+        },
+      },
+      sell: {
+        "S&P500": {
+          quantity: 5,
+          average: 22553,
+        },
+      },
+      custody: [{
+        stock: {
+          symbol: "S&P500",
+          specification: "IShare S&P500",
+        },
+        quantity: 24,
+        averagePrice: 234.82,
+        buyPrice: 233.22,
+        buyQuantity: 29,
+        createdAt: "2023-07-09",
+        id: 4,
+      }]
+    })
   });
 });

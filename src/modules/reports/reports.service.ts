@@ -18,8 +18,11 @@ import { stock } from '../brokerage-order/adapter/__tests__/seed/brokerage-order
 import { Stock } from '../brokerage-order/adapter/repository/entity/stock.typeorm.entity';
 import { StockService } from '../brokerage-order/domain/stock.service';
 import { OrderService } from '../brokerage-order/domain/order.service';
+import { CustodyResponseDTO } from './dto/custody.response.dto';
+import { AnnualReportResponseDTO } from './dto/annual-report.response.dto';
+import { plainToClass } from 'class-transformer';
 
-type Month =
+export type Month =
   | 'january'
   | 'february'
   | 'march'
@@ -55,7 +58,8 @@ export class ReportsService {
     private stockService: StockService,
     private orderService: OrderService,
   ) {}
-  public async generateAnnual(year: number) {
+
+  public async generateAnnual(year: number): Promise<AnnualReportResponseDTO> {
     const months = { ...EMPTY_MONTHS };
 
     const { tradedStocks, tradedStockSymbols } =
@@ -87,7 +91,7 @@ export class ReportsService {
       months[monthName] = {
         buy: buySideAvegagePrice,
         sell: sellSideAvegagePrice,
-        custody,
+        custody: custody.map(item => plainToClass(CustodyResponseDTO, item)),
       };
     }
 
@@ -97,7 +101,7 @@ export class ReportsService {
   private calculateAveragePrice(ordersOfMonthGroupedByBuyAndSell, buyOrSell) {
     return ordersOfMonthGroupedByBuyAndSell[buyOrSell].reduce(
       (total, current) => {
-        const stockSybom = current.stockSymbol;
+        const stockSybom = current.symbol;
 
         if (total[stockSybom]) {
           const newQuantity = total[stockSybom].quantity + current.quantity;

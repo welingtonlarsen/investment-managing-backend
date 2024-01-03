@@ -3,6 +3,7 @@ import { BrokerageOrderEntity } from '../entity/brokerage-order.entity';
 import { BrokerageOrderResponseDto } from '../../controllers/dto/response/brokerage-order.response.dto';
 import { BusinessSummaryResponseDto } from '../../controllers/dto/response/business-summary.response.dto';
 import { plainToClass } from 'class-transformer';
+import { OrderEntity } from '../entity/order.entity';
 
 export class BrokerageOrderEntityFactory {
   static from(dto: CreateBrokerageOrderDto): BrokerageOrderEntity {
@@ -21,7 +22,7 @@ export class BrokerageOrderEntityFactory {
 
     return new BrokerageOrderEntity(
       dto.generalInformation,
-      orders,
+      orders as OrderEntity[],
       businessSummaryDto,
       financialSummaryDto,
     );

@@ -26,7 +26,7 @@ describe('Custody e2e', () => {
     // create new brokerage note
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['BUY_S&P500_1'])
+      .send(brokeragenotes['BUY_S&P500_JUNE_1'])
       .expect(201);
 
     // get custody
@@ -54,13 +54,13 @@ describe('Custody e2e', () => {
     // create new brokerage note
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['BUY_S&P500_1'])
+      .send(brokeragenotes['BUY_S&P500_JUNE_1'])
       .expect(201);
 
     // create other brokerage order
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['BUY_S&P500_2'])
+      .send(brokeragenotes['BUY_S&P500_JUNE_2'])
       .expect(201);
 
     // get custody
@@ -87,19 +87,19 @@ describe('Custody e2e', () => {
     // create new brokerage note
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['BUY_S&P500_1'])
+      .send(brokeragenotes['BUY_S&P500_JUNE_1'])
       .expect(201);
 
     // create other brokerage order
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['BUY_S&P500_2'])
+      .send(brokeragenotes['BUY_S&P500_JUNE_2'])
       .expect(201);
 
     // create selling brokerage order
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['SELL_S&P500_1'])
+      .send(brokeragenotes['SELL_S&P500_JULY_1'])
       .expect(201);
 
     // get custody
@@ -126,19 +126,19 @@ describe('Custody e2e', () => {
     // create new brokerage note
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['BUY_S&P500_1'])
+      .send(brokeragenotes['BUY_S&P500_JUNE_1'])
       .expect(201);
 
     // create other brokerage order
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['BUY_S&P500_2'])
+      .send(brokeragenotes['BUY_S&P500_JUNE_2'])
       .expect(201);
 
     // create selling brokerage order
     await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['SELL_S&P500_1'])
+      .send(brokeragenotes['SELL_S&P500_JULY_1'])
       .expect(201);
 
     // create brokerage order with new stock
@@ -183,7 +183,7 @@ describe('Custody e2e', () => {
     // create selling brokerage order
     const result = await request(app.getHttpServer())
       .post('/brokeragenotes')
-      .send(brokeragenotes['SELL_S&P500_1']);
+      .send(brokeragenotes['SELL_S&P500_JULY_1']);
 
     expect(result.statusCode).toBe(501);
     expect(result.body).toStrictEqual({

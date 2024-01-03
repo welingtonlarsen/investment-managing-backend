@@ -1,5 +1,5 @@
 export default {
-  'BUY_S&P500_1': {
+  'BUY_S&P500_JUNE_1': {
     generalInformation: {
       brokerageOrderNumber: 75670314,
       tradingFlorDate: '2023-06-20',
@@ -54,7 +54,7 @@ export default {
       netDebitOrCredit: 'DEBIT',
     },
   },
-  'BUY_S&P500_2': {
+  'BUY_S&P500_JUNE_2': {
     generalInformation: {
       brokerageOrderNumber: 75967773,
       tradingFlorDate: '2023-06-22',
@@ -109,7 +109,7 @@ export default {
       netDebitOrCredit: 'DEBIT',
     },
   },
-  'BUY_S&P500_3': {
+  'BUY_S&P500_JULY_1': {
     generalInformation: {
       brokerageOrderNumber: 75967773,
       tradingFlorDate: '2023-07-20',
@@ -164,7 +164,7 @@ export default {
       netDebitOrCredit: 'DEBIT',
     },
   },
-  'SELL_S&P500_1': {
+  'SELL_S&P500_JULY_1': {
     generalInformation: {
       brokerageOrderNumber: 75967774,
       tradingFlorDate: '2023-07-10',
