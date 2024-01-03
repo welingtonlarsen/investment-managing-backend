@@ -3,6 +3,7 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { AppModule } from '../src/modules/app.module';
 import * as request from 'supertest';
 import brokeragenotes from './support/brokeragenotes';
+import { format } from 'date-fns';
 
 describe('Custody e2e', () => {
   let app: INestApplication;
@@ -43,7 +44,7 @@ describe('Custody e2e', () => {
         averagePrice: 23645,
         buyPrice: 23645,
         buyQuantity: 22,
-        createdAt: '2023-10-19',
+        createdAt: '2023-06-19',
         id: 1,
       },
     ]);
@@ -76,7 +77,7 @@ describe('Custody e2e', () => {
         averagePrice: 23552,
         buyPrice: 23552,
         buyQuantity: 27,
-        createdAt: '2023-10-25',
+        createdAt: '2023-06-21',
         id: 2,
       },
     ]);
@@ -115,7 +116,7 @@ describe('Custody e2e', () => {
         averagePrice: 23779,
         buyPrice: 23552,
         buyQuantity: 27,
-        createdAt: '2023-10-27',
+        createdAt: '2023-07-09',
         id: 3,
       },
     ]);
@@ -160,7 +161,7 @@ describe('Custody e2e', () => {
         averagePrice: 2430,
         buyPrice: 2430,
         buyQuantity: 100,
-        createdAt: '2023-11-09',
+        createdAt: '2023-08-11',
         id: 4,
       },
       {
@@ -172,7 +173,7 @@ describe('Custody e2e', () => {
         averagePrice: 23779,
         buyPrice: 23552,
         buyQuantity: 27,
-        createdAt: '2023-10-27',
+        createdAt: '2023-07-09',
         id: 3,
       },
     ]);

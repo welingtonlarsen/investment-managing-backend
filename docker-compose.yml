@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 services:
   # db:
@@ -20,8 +20,7 @@ services:
   #   ports:
   #     - '3309:3306'
   postgres:
-    image: postgres:latest
-    platform: linux/arm64 # Especifica a arquitetura ARM64
+    image: postgres:14-alpine
     restart: always
     environment:
       POSTGRES_DB: 'investment-managing'
@@ -32,8 +31,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   postgres-e2e:
-    image: postgres:latest
-    platform: linux/arm64 # Especifica a arquitetura ARM64
+    image: postgres:14-alpine
     restart: always
     environment:
       POSTGRES_DB: 'investment_managing_integration_test'
@@ -43,6 +41,14 @@ services:
       - '5433:5432'
     volumes:
       - postgres_data_e2e:/var/lib/postgresql/data
+  
+  pg-admin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "teste@teste.com"
+      PGADMIN_DEFAULT_PASSWORD: "teste123"
+    ports:
+      - "16543:80"
 
 volumes:
   postgres_data:
